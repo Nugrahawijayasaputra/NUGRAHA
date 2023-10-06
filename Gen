@@ -1,0 +1,35 @@
+import os
+import json
+
+# Define the directory where the JSON files are stored
+directory = r""
+
+# Define the base URL to be added to the metadata
+base_url = "ipfs://QmY8eBJsda2dd3d8YCEmdt333XR/"
+
+# Define the new description
+new_description = ""
+
+# Loop through each file in the directory and update the metadata
+for filename in os.listdir(directory):
+    if filename.endswith(".json"):
+        # Open the JSON file and load the data
+        with open(os.path.join(directory, filename), "r", encoding="utf-8") as f:
+            data = json.load(f)
+        
+        # Change the description
+        data["description"] = new_description
+        
+        # Change the base URL
+        data["image"] = base_url + data["image"].split("/")[-1]
+        
+        # Save the updated data to the file
+        with open(os.path.join(directory, filename), "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+        
+        # Print a message indicating that the file was updated
+        print(f"{filename} updated.")
+        
+        # Print the updated metadata
+        print("Updated Metadata:")
+        print(json.dumps(data, indent=4))
